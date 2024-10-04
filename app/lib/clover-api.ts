@@ -1,14 +1,14 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
 import { Product, Order } from '@/app/types';
 
-const API_KEY = process.env.CLOVER_API_KEY;
+const API_KEY = process.env.CLOVER_API_TOKEN;
 const MERCHANT_ID = process.env.MERCHANT_ID;
 const API_BASE_URL = `https://sandbox.dev.clover.com/v3/merchants/${MERCHANT_ID}`;
 console.log(API_KEY, MERCHANT_ID, API_BASE_URL);
 
 
 if (!API_KEY || !MERCHANT_ID) {
-  throw new Error('CLOVER_API_KEY or MERCHANT_ID is not set in environment variables');
+  throw new Error('CLOVER_API_TOKEN or MERCHANT_ID is not set in environment variables');
 }
 
 const api: AxiosInstance = axios.create({
@@ -55,10 +55,11 @@ export async function getProductById(id: string): Promise<Product> {
 }
 
 export async function createOrder(order: Partial<Order>): Promise<Order> {
-  try {
-    const response = await api.post('/orders', order);
-    return response.data;
-  } catch (error) {
-    handleApiError(error, 'Error creating order');
-  }
+  const response = await api.post('/v3/merchants/{mId}/orders', order);
+  return response.data;
+}
+
+export async function getOrderById(id: string): Promise<Order> {
+  const response = await api.get(`/v3/merchants/{mId}/orders/${id}`);
+  return response.data;
 }

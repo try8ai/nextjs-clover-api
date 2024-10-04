@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { useCartStore } from "../lib/store";
 import Link from "next/link";
 
