@@ -14,4 +14,19 @@ export interface Order {
     quantity: number;
     price: number;
   }[];
+  customer: {
+    email: string;
+  };
+  shippingAddress: {
+    address1: string;
+    city: string;
+    state: string;
+    zip: string;
+    country: string;
+  };
+}
+
+export interface CartItem {
+  product: Product;
+  quantity: number;
 }
