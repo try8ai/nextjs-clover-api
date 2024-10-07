@@ -1,20 +1,8 @@
 import { FormEvent } from "react";
 
-interface CheckoutFormProps {
-  onSubmit: (formData: FormData) => void;
-  isLoading: boolean;
-  error: string | null;
-}
-
-export default function CheckoutForm({
-  onSubmit,
-  isLoading,
-  error,
-}: CheckoutFormProps) {
+export default function CheckoutForm() {
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    onSubmit(formData);
   }
 
   return (
@@ -115,13 +103,12 @@ export default function CheckoutForm({
           className="w-full p-2 border rounded"
         />
       </div>
-      {error && <p className="text-red-500">{error}</p>}
+
       <button
         type="submit"
-        disabled={isLoading}
         className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition-colors disabled:bg-blue-300"
       >
-        {isLoading ? "Processing..." : "Make Payment"}
+        Make Payment
       </button>
     </form>
   );

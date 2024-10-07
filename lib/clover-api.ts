@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
-import { Product, Order } from '@/types';
+import { Product, Order, CreateOrderRequest } from '@/types';
 
 const API_KEY = process.env.NEXT_PUBLIC_CLOVER_API_TOKEN;
 const MERCHANT_ID = process.env.NEXT_PUBLIC_CLOVER_MERCHANT_ID;
@@ -56,9 +56,14 @@ export async function getProductById(id: string): Promise<Product> {
   }
 }
 
-export async function createOrder(order: Partial<Order>): Promise<Order> {
-  const response = await api.post('/atomic_order/orders', order);
-  return response.data;
+
+export async function createOrder(orderRequest: CreateOrderRequest): Promise<Order> {
+  try {
+    const response = await api.post('/atomic_order/orders', orderRequest);
+    return response.data;
+  } catch (error) {
+    handleApiError(error, 'Error creating order');
+  }
 }
 
 export async function getOrderById(id: string): Promise<Order> {
