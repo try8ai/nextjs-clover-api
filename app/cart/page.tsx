@@ -1,11 +1,16 @@
 "use client";
 
 import React from "react";
-import { useCartStore } from "../lib/store";
+import { useCartStore } from "../../lib/store";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { MoveLeft } from "lucide-react";
 
 export default function CartPage() {
   const { items, removeItem } = useCartStore();
+  const router = useRouter();
+
+  console.log("items: ", items.length);
 
   const total = items.reduce(
     (sum, item) => sum + item.product.price * item.quantity,
@@ -15,6 +20,13 @@ export default function CartPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-6">Your Cart</h1>
+      <button
+        onClick={() => router.back()}
+        className="flex items-center text-blue-500 hover:text-blue-700 mb-4"
+      >
+        <MoveLeft className="h-5 w-5 mr-2" />
+        Back
+      </button>
       {items.length === 0 ? (
         <p>Your cart is empty.</p>
       ) : (
@@ -27,7 +39,10 @@ export default function CartPage() {
               <div>
                 <h3 className="font-semibold">{item.product.name}</h3>
                 <p>Quantity: {item.quantity}</p>
-                <p>Price: ${(item.product.price * item.quantity).toFixed(2)}</p>
+                <p>
+                  Price: $
+                  {((item.product.price / 100) * item.quantity).toFixed(2)}
+                </p>
               </div>
               <button
                 onClick={() => removeItem(item.product.id)}
@@ -38,7 +53,9 @@ export default function CartPage() {
             </div>
           ))}
           <div className="mt-6">
-            <p className="text-xl font-bold">Total: ${total.toFixed(2)}</p>
+            <p className="text-xl font-bold">
+              Total: ${(total / 100).toFixed(2)}
+            </p>
             <Link
               href="/checkout"
               className="mt-4 inline-block bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition-colors"

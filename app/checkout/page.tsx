@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useCartStore } from "../lib/store";
-// import { createOrder } from '@/lib/clover-api';
-import CheckoutForm from "../components/CheckoutForm";
-import OrderSummary from "../components/OrderSummary";
-import { createOrder } from "../lib/clover-api";
+import { useCartStore } from "../../lib/store";
+import CheckoutForm from "../../components/CheckoutForm";
+import OrderSummary from "../../components/OrderSummary";
+import { createOrder } from "../../lib/clover-api";
+import { MoveLeft } from "lucide-react";
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -15,7 +15,7 @@ export default function CheckoutPage() {
   const [error, setError] = useState<string | null>(null);
 
   const total = items.reduce(
-    (sum, item) => sum + item.product.price * item.quantity,
+    (sum, item) => sum + (item.product.price / 100) * item.quantity,
     0
   );
 
@@ -28,7 +28,7 @@ export default function CheckoutPage() {
       items: items.map((item) => ({
         item: { id: item.product.id, name: item.product.name },
         quantity: item.quantity,
-        price: item.product.price * 100, // Convert to cents
+        price: item.product.price, // Convert to cents
       })),
       customer: {
         firstName: formData.get("firstName") as string,
@@ -60,6 +60,13 @@ export default function CheckoutPage() {
     return (
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-6">Checkout</h1>
+        <button
+          onClick={() => router.back()}
+          className="flex items-center text-blue-500 hover:text-blue-700 mb-4"
+        >
+          <MoveLeft className="h-5 w-5 mr-2" />
+          Back
+        </button>
         <p>Your cart is empty. Please add some items before checking out.</p>
       </div>
     );
