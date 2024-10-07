@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useCartStore } from "../../lib/store";
 import { useRouter } from "next/navigation";
 import { MoveLeft } from "lucide-react";
@@ -11,19 +11,27 @@ import { useOrderStore } from "@/lib/order-store";
 export default function CartPage() {
   const { items, removeItem } = useCartStore();
   const { setOrder } = useOrderStore();
+  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
 
   const handleCheckout = async () => {
+    setIsLoading(true);
     const orderItem = {
       orderCart: {
         lineItems: createOrderCartLineItems(items),
       },
     };
-    const newOrder = await createOrder(orderItem);
-    setOrder(newOrder);
+    try {
+      const newOrder = await createOrder(orderItem);
+      setOrder(newOrder);
 
-    router.push(`/checkout`);
+      router.push(`/checkout`);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const total = items.reduce(
@@ -74,7 +82,7 @@ export default function CartPage() {
               onClick={handleCheckout}
               className="mt-4 inline-block bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition-colors"
             >
-              Checkout
+              {isLoading ? "Loading..." : "Checkout"}
             </button>
           </div>
         </>
