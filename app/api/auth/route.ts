@@ -32,7 +32,7 @@ async function requestAPIToken(code: string) {
 
   try {
     const response = await axios.post(url, data);
-    console.log('API Token Response:', response.data);
+
     return NextResponse.json(response.data);
   } catch (error) {
     if (axios.isAxiosError(error)) {

@@ -8,25 +8,36 @@ export interface Product {
 
 export interface Order {
   id: string;
+  currency: string;
   total: number;
-  items: {
-    item: { id: string; name: string };
-    quantity: number;
-    price: number;
-  }[];
-  customer: {
-    email: string;
+  state: string;
+  createdTime: number;
+  lineItems: {
+    elements: LineItem[];
   };
-  shippingAddress: {
-    address1: string;
-    city: string;
-    state: string;
-    zip: string;
-    country: string;
-  };
+  // Add other relevant fields as needed
+}
+
+export interface LineItem {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+}
+
+interface OrderCart {
+  lineItems: LineItem[];
+}
+
+export interface CreateOrderRequest {
+  orderCart: OrderCart;
 }
 
 export interface CartItem {
   product: Product;
   quantity: number;
+}
+
+export interface OrderSummaryProps {
+  order: Order;
 }

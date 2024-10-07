@@ -2,15 +2,29 @@
 
 import React from "react";
 import { useCartStore } from "../../lib/store";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MoveLeft } from "lucide-react";
+import { createOrder } from "@/lib/clover-api";
+import { createOrderCartLineItems } from "@/lib/utils";
+import { useOrderStore } from "@/lib/order-store";
 
 export default function CartPage() {
   const { items, removeItem } = useCartStore();
+  const { setOrder } = useOrderStore();
+
   const router = useRouter();
 
-  console.log("items: ", items.length);
+  const handleCheckout = async () => {
+    const orderItem = {
+      orderCart: {
+        lineItems: createOrderCartLineItems(items),
+      },
+    };
+    const newOrder = await createOrder(orderItem);
+    setOrder(newOrder);
+
+    router.push(`/checkout`);
+  };
 
   const total = items.reduce(
     (sum, item) => sum + item.product.price * item.quantity,
@@ -56,12 +70,12 @@ export default function CartPage() {
             <p className="text-xl font-bold">
               Total: ${(total / 100).toFixed(2)}
             </p>
-            <Link
-              href="/checkout"
+            <button
+              onClick={handleCheckout}
               className="mt-4 inline-block bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition-colors"
             >
-              Proceed to Checkout
-            </Link>
+              Checkout
+            </button>
           </div>
         </>
       )}
