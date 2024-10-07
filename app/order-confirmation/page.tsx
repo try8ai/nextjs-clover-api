@@ -1,5 +1,5 @@
-import { getOrderById } from "@/app/lib/clover-api";
-import { Order } from "@/app/types";
+import { getOrderById } from "@/lib/clover-api";
+import { Order } from "@/types";
 
 interface OrderConfirmationPageProps {
   params: { id: string };

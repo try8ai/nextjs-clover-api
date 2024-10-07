@@ -1,10 +1,12 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
-import { Product, Order } from '@/app/types';
+import { Product, Order } from '@/types';
 
-const API_KEY = process.env.CLOVER_API_TOKEN;
-const MERCHANT_ID = process.env.MERCHANT_ID;
-const API_BASE_URL = `https://sandbox.dev.clover.com/v3/merchants/${MERCHANT_ID}`;
-console.log(API_KEY, MERCHANT_ID, API_BASE_URL);
+const API_KEY = process.env.NEXT_PUBLIC_CLOVER_API_TOKEN;
+const MERCHANT_ID = process.env.NEXT_PUBLIC_CLOVER_MERCHANT_ID;
+const API_BASE_URL = `https://api.clover.com/v3/merchants/${MERCHANT_ID}`;
+
+
+
 
 
 if (!API_KEY || !MERCHANT_ID) {
@@ -55,7 +57,7 @@ export async function getProductById(id: string): Promise<Product> {
 }
 
 export async function createOrder(order: Partial<Order>): Promise<Order> {
-  const response = await api.post('/v3/merchants/{mId}/orders', order);
+  const response = await api.post('/atomic_order/orders', order);
   return response.data;
 }
 

@@ -121,7 +121,7 @@ export default function CheckoutForm({
         disabled={isLoading}
         className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition-colors disabled:bg-blue-300"
       >
-        {isLoading ? "Processing..." : "Place Order"}
+        {isLoading ? "Processing..." : "Make Payment"}
       </button>
     </form>
   );
